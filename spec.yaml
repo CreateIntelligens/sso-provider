@@ -1,0 +1,16 @@
+project: SSO Provider
+language: Python 3.11
+framework: FastAPI
+requirements:
+  - 要有登入頁面
+  - 登入後進入首頁，有多個站台
+  - 需要以下端點:
+    - /login: 登入頁面
+    - /logout: 登出
+    - /home: 首頁，顯示多個站台連結
+    - /validate_token: 驗證 token 的有效性
+  - 資料庫使用 MySQL，連接localhost:3306/sso_provider root:w23452345
+
+
+
+
