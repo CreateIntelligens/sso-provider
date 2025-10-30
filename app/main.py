@@ -59,13 +59,17 @@ async def login(request: Request, email: str = Form(...), password: str = Form(.
     db.add(db_token)
     db.commit()
 
-    return JSONResponse({
-        "sso_token": token,
-        "token_type": "Bearer",
-        "expires_in": int((expires_at - datetime.now(timezone.utc)).total_seconds()),
-        "user": {"id": user.id, "email": user.email},
-    })
-
+    # redirect to home with token cookie set
+    response = RedirectResponse(url="/home", status_code=status.HTTP_302_FOUND)
+    response.set_cookie(
+        "sso_token",
+        token,
+        httponly=settings.COOKIE_HTTPONLY,
+        secure=settings.COOKIE_SECURE,
+        samesite=settings.COOKIE_SAMESITE,
+        domain=settings.COOKIE_DOMAIN,
+    )
+    return response
 
 @app.get("/home", response_class=HTMLResponse)
 async def home(request: Request, db: Session = Depends(get_db)):
