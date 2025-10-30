@@ -13,6 +13,17 @@ Run locally:
 4) Seed a user: `curl -X POST http://localhost:8000/setup_seed`
 5) Open http://localhost:8000/login
 
+Run with Docker Compose:
+1) Build and start: `docker compose up -d --build`
+2) Wait for app healthcheck to pass, then seed a user:
+   `curl -X POST http://localhost:8000/setup_seed`
+3) Open http://localhost:8000/login
+
+Notes:
+- The app container uses environment variables defined in docker-compose.yml (DB_HOST=db, etc.).
+- To customize cookies or DB credentials, edit docker-compose.yml or provide an .env file and reference it via `env_file`.
+- For dev hot-reload, mount the repo into the container and adjust CMD to use `--reload`.
+
 Config via env:
 - DB_USER, DB_PASSWORD, DB_HOST, DB_PORT, DB_NAME
 - SESSION_SECRET_KEY, JWT_SECRET_KEY, JWT_ALGORITHM, JWT_EXPIRES_MINUTES
