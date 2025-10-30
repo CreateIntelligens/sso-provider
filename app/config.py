@@ -7,12 +7,6 @@ load_dotenv()
 
 
 class Settings:
-    # Cookie settings
-    COOKIE_DOMAIN: str | None = os.getenv("COOKIE_DOMAIN")  # e.g. .test.com
-    COOKIE_SECURE: bool = os.getenv("COOKIE_SECURE", "true").lower() == "true"
-    COOKIE_SAMESITE: str = os.getenv("COOKIE_SAMESITE", "Lax")  # "Lax" | "None" | "Strict"
-    COOKIE_HTTPONLY: bool = os.getenv("COOKIE_HTTPONLY", "false").lower() == "true"  # set false to allow frontend JS to read
-
     # Database
     DB_USER: str = os.getenv("DB_USER", "root")
     DB_PASSWORD: str = os.getenv("DB_PASSWORD", "w23452345")

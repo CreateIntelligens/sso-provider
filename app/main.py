@@ -59,26 +59,12 @@ async def login(request: Request, email: str = Form(...), password: str = Form(.
     db.add(db_token)
     db.commit()
 
-    # For browser flow, redirect to home; also return token in JSON if client expects JSON
-    accept = request.headers.get("accept", "")
-    if "application/json" in accept:
-        return JSONResponse({
-            "sso_token": token,
-            "token_type": "Bearer",
-            "expires_in": int((expires_at - datetime.now(timezone.utc)).total_seconds()),
-            "user": {"id": user.id, "email": user.email},
-        })
-    else:
-        response = RedirectResponse(url="/home", status_code=status.HTTP_302_FOUND)
-        response.set_cookie(
-            "sso_token",
-            token,
-            httponly=settings.COOKIE_HTTPONLY,
-            secure=settings.COOKIE_SECURE,
-            samesite=settings.COOKIE_SAMESITE,
-            domain=settings.COOKIE_DOMAIN,
-        )
-        return response
+    return JSONResponse({
+        "sso_token": token,
+        "token_type": "Bearer",
+        "expires_in": int((expires_at - datetime.now(timezone.utc)).total_seconds()),
+        "user": {"id": user.id, "email": user.email},
+    })
 
 
 @app.get("/home", response_class=HTMLResponse)
