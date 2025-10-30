@@ -21,7 +21,6 @@ Thumbs.db
 
 # Env/config
 .env
-.env.*
 *.local
 
 # Byte-compiled / cache

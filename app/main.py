@@ -70,7 +70,14 @@ async def login(request: Request, email: str = Form(...), password: str = Form(.
         })
     else:
         response = RedirectResponse(url="/home", status_code=status.HTTP_302_FOUND)
-        response.set_cookie("sso_token", token, httponly=False, secure=False, samesite="lax")
+        response.set_cookie(
+            "sso_token",
+            token,
+            httponly=settings.COOKIE_HTTPONLY,
+            secure=settings.COOKIE_SECURE,
+            samesite=settings.COOKIE_SAMESITE,
+            domain=settings.COOKIE_DOMAIN,
+        )
         return response
 
 
@@ -104,7 +111,14 @@ async def home(request: Request, db: Session = Depends(get_db)):
     context = {"request": request, "email": request.session.get("email"), "sso_token": sso_token}
     response = templates.TemplateResponse("home.html", context)
     if needs_new:
-        response.set_cookie("sso_token", sso_token, httponly=False, secure=False, samesite="lax")
+        response.set_cookie(
+        "sso_token",
+        sso_token,
+        httponly=settings.COOKIE_HTTPONLY,
+        secure=settings.COOKIE_SECURE,
+        samesite=settings.COOKIE_SAMESITE,
+        domain=settings.COOKIE_DOMAIN,
+    )
     return response
 
 
@@ -128,7 +142,7 @@ async def logout(request: Request, db: Session = Depends(get_db)):
 
     request.session.clear()
     response = RedirectResponse(url="/login", status_code=status.HTTP_302_FOUND)
-    response.delete_cookie("sso_token")
+    response.delete_cookie("sso_token", domain=settings.COOKIE_DOMAIN)
     return response
 
 
